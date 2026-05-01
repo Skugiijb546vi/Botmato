@@ -44,7 +44,7 @@ def check_membership(user_id):
 
 @bot.message_handler(commands=['ping'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook ئۆنلاینە!")
+    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook ئۆنلاینە بە دیزاینە VIP یەکەوە!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'document', 'audio', 'voice', 'sticker', 'animation', 'dice', 'video_note', 'contact', 'location', 'poll', 'venue'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
@@ -75,10 +75,8 @@ def handle_group_messages(message):
     except Exception as e:
         return 
 
-    # 🎨 دیزاینە نوێیەکە
+    # 🎨 دیزاینی دوگمەکان (٢ دوگمە لە ڕیزێکدا)
     markup = InlineKeyboardMarkup(row_width=2)
-    
-    # هەموو چەناڵەکان کران بە شین (primary)
     btn1 = InlineKeyboardButton("نەزانراو ❓", url="https://t.me/Matounknown2", style="primary")
     btn2 = InlineKeyboardButton("دراماکان 🎭", url="https://t.me/matounknowndrama", style="primary")
     btn3 = InlineKeyboardButton("هەواڵەکان 📰", url="https://t.me/kurdishrevolution1", style="primary")
@@ -87,22 +85,38 @@ def handle_group_messages(message):
     markup.row(btn1, btn2)
     markup.row(btn3, btn4)
     
-    # پشکنین مایەوە بە سەوزی (success)
     check_btn = InlineKeyboardButton("پشکنینی بەشداریکردن ✅", callback_data="check_join", style="success")
     markup.row(check_btn)
 
+    # 🎨 دیزاینە VIP و شاهانەکەی نوسین بە Blockquote
     safe_name = html.escape(message.from_user.first_name)
     warning_text = (
-        f"👤 <b>سڵاو بەڕێزم</b> <a href='tg://user?id={user_id}'>{safe_name}</a>\n\n"
-        f"🔒 <b>بۆ ئەوەی بتوانیت لەم گروپە نامە بنێریت، پێویستە لەم چەناڵانە بەشداربیت.</b>\n\n"
-        f"👇 <b>تکایە جۆین بکە و دواتر نامە بنێرەوە:</b>"
+        f"<blockquote><b>👋 سڵاو</b> <a href='tg://user?id={user_id}'>{safe_name}</a>\n\n"
+        f"🛑 <b>پێویستە لەم چەناڵانە بەشداربیت بۆ ئەوەی بتوانیت لەم گروپە نامە بنێریت:</b>\n\n"
+        f"⏳ <i>ئەم ئاگادارییە دوای ٦٠ چرکە خۆکارانە دەسڕێتەوە...</i></blockquote>"
     )
 
     try:
-        sent_msg = bot.send_message(message.chat.id, warning_text, reply_markup=markup, parse_mode="HTML")
+        # ١. ئایدی ستیکەرەکەت کە دەرهێندرا
+        STICKER_ID = "CAACAgIAAxkBAAEDb-Jp9I9Su2MUqWN46f16R4vhFGfkVQACoaQAArZgqUuJfOJVZ33W0TsE"
+        
+        # ٢. ناردنی ستیکەرەکە
+        sent_sticker = bot.send_sticker(message.chat.id, sticker=STICKER_ID)
+        
+        # ٣. ناردنی نامەکە لە ژێر ستیکەرەکە
+        sent_msg = bot.send_message(
+            message.chat.id, 
+            text=warning_text, 
+            reply_markup=markup, 
+            parse_mode="HTML"
+        )
+        
+        # ٤. سڕینەوەی هەردووکیان دوای ٦٠ چرکە
+        threading.Timer(60.0, delete_bot_message, args=[message.chat.id, sent_sticker.message_id]).start()
         threading.Timer(60.0, delete_bot_message, args=[message.chat.id, sent_msg.message_id]).start()
+        
     except Exception as e:
-        pass
+        logger.error(f"Error sending warning message: {e}")
 
 def delete_bot_message(chat_id, message_id):
     try:
@@ -129,7 +143,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "🤖 Bot is running smoothly on Render!"
+    return "🤖 Bot is running smoothly on Render with VIP Sticker Design!"
 
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
