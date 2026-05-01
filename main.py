@@ -44,7 +44,7 @@ def check_membership(user_id):
 
 @bot.message_handler(commands=['ping'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook ئۆنلاینە بە دیزاینی دوو-بە-دوو!")
+    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook ئۆنلاینە!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'document', 'audio', 'voice', 'sticker', 'animation', 'dice', 'video_note', 'contact', 'location', 'poll', 'venue'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
@@ -75,19 +75,19 @@ def handle_group_messages(message):
     except Exception as e:
         return 
 
-    # 🎨 دیزاینە نوێیەکە بە شێوازی دوو دوگمە لە یەک ڕیزدا (row_width=2)
+    # 🎨 دیزاینە نوێیەکە
     markup = InlineKeyboardMarkup(row_width=2)
     
+    # هەموو چەناڵەکان کران بە شین (primary)
     btn1 = InlineKeyboardButton("نەزانراو ❓", url="https://t.me/Matounknown2", style="primary")
-    btn2 = InlineKeyboardButton("دراماکان 🎭", url="https://t.me/matounknowndrama", style="danger")
-    btn3 = InlineKeyboardButton("هەواڵەکان 📰", url="https://t.me/kurdishrevolution1", style="success")
+    btn2 = InlineKeyboardButton("دراماکان 🎭", url="https://t.me/matounknowndrama", style="primary")
+    btn3 = InlineKeyboardButton("هەواڵەکان 📰", url="https://t.me/kurdishrevolution1", style="primary")
     btn4 = InlineKeyboardButton("سێبەر تیڤی 📺", url="https://t.me/DOBLAZH_k", style="primary")
     
-    # دانانی دوگمەکان لە ڕیزەکاندا بۆ ئەوەی ڕێک بن
     markup.row(btn1, btn2)
     markup.row(btn3, btn4)
     
-    # دوگمەی پشکنین بە تەنیا لە ڕیزێکی خوارەوە بۆ ئەوەی گەورە بێت
+    # پشکنین مایەوە بە سەوزی (success)
     check_btn = InlineKeyboardButton("پشکنینی بەشداریکردن ✅", callback_data="check_join", style="success")
     markup.row(check_btn)
 
@@ -129,7 +129,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "🤖 Bot is running smoothly on Render with New Grid UI!"
+    return "🤖 Bot is running smoothly on Render!"
 
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
