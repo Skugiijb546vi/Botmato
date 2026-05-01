@@ -17,11 +17,12 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com"
 
 bot = telebot.TeleBot(TOKEN)
 
-# لیستی چەناڵەکان کە دەبێت خەڵک جۆینی بکات
+# لیستی چەناڵەکان کە دەبێت خەڵک جۆینی بکات (بەبێ @)
 CHANNELS = [
-    "DOBLAZH_k",
     "Matounknown2",
-    "kurdishrevolution1"
+    "matounknowndrama",
+    "kurdishrevolution1",
+    "DOBLAZH_k"
 ]
 
 # ⚡ لیستی ئەو یوزەرنەیمانەی کە حوڕن (بە پیتی بچووک)
@@ -43,7 +44,7 @@ def check_membership(user_id):
 
 @bot.message_handler(commands=['ping'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook لەسەر ڕێندەر ئۆنلاینە!")
+    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook لەسەر ڕێندەر ئۆنلاینە و چوار کەناڵەکە چالاکن!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'document', 'audio', 'voice', 'sticker', 'animation', 'dice', 'video_note', 'contact', 'location', 'poll', 'venue'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
@@ -61,25 +62,33 @@ def handle_group_messages(message):
 
     try:
         group_member = bot.get_chat_member(message.chat.id, user_id)
+        # ئەدمین و خاوەن گروپەکان حوڕن
         if group_member.status in ['creator', 'administrator']:
             return 
     except Exception as e:
         pass
 
+    # ئەگەر لە هەموویان جۆین بوو، ڕێگەی پێ بدە
     if check_membership(user_id):
         return
 
+    # ئەگەر جۆین نەبوو، نامەکەی بسڕەوە
     try:
         bot.delete_message(message.chat.id, message.message_id)
     except Exception as e:
         return 
 
+    # دروستکردنی دوگمەکان بۆ چوار کەناڵەکە
     markup = InlineKeyboardMarkup()
-    btn1 = InlineKeyboardButton("DOBLAZH_k 🔗", url="https://t.me/DOBLAZH_k")
-    btn2 = InlineKeyboardButton("Matounknown2 🎰", url="https://t.me/Matounknown2")
+    btn1 = InlineKeyboardButton("Matounknown2 🎰", url="https://t.me/Matounknown2")
+    btn2 = InlineKeyboardButton("matounknowndrama 🎭", url="https://t.me/matounknowndrama")
     btn3 = InlineKeyboardButton("kurdishrevolution1 🏆", url="https://t.me/kurdishrevolution1")
+    btn4 = InlineKeyboardButton("DOBLAZH_k 🔗", url="https://t.me/DOBLAZH_k")
+    
+    # دوو دوگمە لە ڕیزێکدا بۆ ئەوەی شاشەکە زۆر نەگرێت
     markup.row(btn1, btn2)
-    markup.row(btn3)
+    markup.row(btn3, btn4)
+    
     check_btn = InlineKeyboardButton("پشکنینی بەشداریکردن 📩", callback_data="check_join")
     markup.row(check_btn)
 
@@ -92,6 +101,7 @@ def handle_group_messages(message):
 
     try:
         sent_msg = bot.send_message(message.chat.id, warning_text, reply_markup=markup, parse_mode="HTML")
+        # نامەی ئاگادارکردنەوەکە دوای ٦٠ چرکە دەسڕێتەوە خۆکارانە بۆ ئەوەی گروپەکە پیس نەبێت
         threading.Timer(60.0, delete_bot_message, args=[message.chat.id, sent_msg.message_id]).start()
     except Exception as e:
         pass
@@ -121,7 +131,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "🤖 Bot is running smoothly on Render!"
+    return "🤖 Bot is running smoothly on Render with 4 Mandatory Channels!"
 
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
@@ -131,12 +141,10 @@ def getMessage():
     return "!", 200
 
 if __name__ == "__main__":
-    # ١. سڕینەوەی وێبهووک و دانانی وێبهووکی نوێ
     bot.remove_webhook()
     time.sleep(1)
     bot.set_webhook(url=WEBHOOK_URL + '/' + TOKEN)
     logger.info(f"Webhook set to: {WEBHOOK_URL}")
 
-    # ٢. کارپێکردنی سێرڤەرەکە بە بەکارهێنانی پۆرتی ڕێندەر
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
