@@ -44,7 +44,7 @@ def check_membership(user_id):
 
 @bot.message_handler(commands=['ping'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook لەسەر ڕێندەر ئۆنلاینە بە دوگمەی ڕەنگاوڕەنگەوە!")
+    bot.reply_to(message, "✅ بۆتەکە بە سیستەمی Webhook ئۆنلاینە بە دیزاینی دوو-بە-دوو!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'document', 'audio', 'voice', 'sticker', 'animation', 'dice', 'video_note', 'contact', 'location', 'poll', 'venue'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
@@ -75,18 +75,21 @@ def handle_group_messages(message):
     except Exception as e:
         return 
 
-    # 🎨 دیزاینە نوێیەکە لێرەدایە بە ڕەنگی سەوز و سوور و شین
-    markup = InlineKeyboardMarkup(row_width=1)
+    # 🎨 دیزاینە نوێیەکە بە شێوازی دوو دوگمە لە یەک ڕیزدا (row_width=2)
+    markup = InlineKeyboardMarkup(row_width=2)
     
-    # style="primary" واتا شین، style="danger" واتا سوور، style="success" واتا سەوز
-    btn1 = InlineKeyboardButton("🎰 | Matounknown2", url="https://t.me/Matounknown2", style="primary")
-    btn2 = InlineKeyboardButton("🎭 | matounknowndrama", url="https://t.me/matounknowndrama", style="danger")
-    btn3 = InlineKeyboardButton("🏆 | kurdishrevolution1", url="https://t.me/kurdishrevolution1", style="success")
-    btn4 = InlineKeyboardButton("🔗 | DOBLAZH_k", url="https://t.me/DOBLAZH_k", style="primary")
+    btn1 = InlineKeyboardButton("نەزانراو ❓", url="https://t.me/Matounknown2", style="primary")
+    btn2 = InlineKeyboardButton("دراماکان 🎭", url="https://t.me/matounknowndrama", style="danger")
+    btn3 = InlineKeyboardButton("هەواڵەکان 📰", url="https://t.me/kurdishrevolution1", style="success")
+    btn4 = InlineKeyboardButton("سێبەر تیڤی 📺", url="https://t.me/DOBLAZH_k", style="primary")
     
-    check_btn = InlineKeyboardButton("✅ | پشکنینی بەشداریکردن", callback_data="check_join", style="success")
+    # دانانی دوگمەکان لە ڕیزەکاندا بۆ ئەوەی ڕێک بن
+    markup.row(btn1, btn2)
+    markup.row(btn3, btn4)
     
-    markup.add(btn1, btn2, btn3, btn4, check_btn)
+    # دوگمەی پشکنین بە تەنیا لە ڕیزێکی خوارەوە بۆ ئەوەی گەورە بێت
+    check_btn = InlineKeyboardButton("پشکنینی بەشداریکردن ✅", callback_data="check_join", style="success")
+    markup.row(check_btn)
 
     safe_name = html.escape(message.from_user.first_name)
     warning_text = (
@@ -126,7 +129,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "🤖 Bot is running smoothly on Render with Colored Buttons!"
+    return "🤖 Bot is running smoothly on Render with New Grid UI!"
 
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
