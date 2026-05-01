@@ -97,8 +97,8 @@ def handle_group_messages(message):
     )
 
     try:
-        # ١. ئایدی ستیکەرەکەت کە دەرهێندرا
-        STICKER_ID = "CAACAgIAAxkBAAEDb-Jp9I9Su2MUqWN46f16R4vhFGfkVQACoaQAArZgqUuJfOJVZ33W0TsE"
+        # ١. ئایدی ستیکەرە نوێیەکەت لێرە دانرا
+        STICKER_ID = "CAACAgIAAxkBAAEDb-Rp9JJaXqdiC1u5yz_aFfAOT3icFAACWaIAAmznqEuhFqjDAAG5XpA7BA"
         
         # ٢. ناردنی ستیکەرەکە
         sent_sticker = bot.send_sticker(message.chat.id, sticker=STICKER_ID)
