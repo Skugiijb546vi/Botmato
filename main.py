@@ -7,120 +7,111 @@ import logging
 from flask import Flask, request
 import os
 
-# 🛠️ ڕێکخستنی سیستەمی لۆگ بۆ دۆزینەوەی هەڵەکان
+# 🛠️ ڕێکخستنی سیستەمی لۆگ
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# 🔑 وەرگرتنی تۆکن و لینک لە سێرڤەر (بۆ پاراستنی ئەمنییەت)
+# 🔑 وەرگرتنی تۆکن و لینک
 TOKEN = os.environ.get("TOKEN", "8602228263:AAGgll36oQCouLWd-7s903h8JY2xKRwcQ0c")
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com")
 
 bot = telebot.TeleBot(TOKEN)
 
-# 📢 لیستی چەناڵە ناچارییەکان
+# 📢 لیستی چەناڵەکان (نەزانراو لادرا)
 CHANNELS = [
-    "Matounknown2",
     "matounknowndrama",
     "kurdishrevolution1",
     "DOBLAZH_k"
 ]
 
-# ⚪ لیستی سپی (ئەوانەی بۆتەکە کاریان پێ نییە)
-WHITELIST = {
-    "matounknowngroup",
-    "matodarklove"
-}
+# ⚪ لیستی سپی (Whitelist)
+WHITELIST = {"matounknowngroup", "matodarklove"}
 
 def check_membership(user_id):
-    """پشکنینی ئەوەی ئایا یوزەر جۆینی هەموو کەناڵەکانی کردووە؟"""
     for channel in CHANNELS:
         try:
             member = bot.get_chat_member(f"@{channel}", user_id)
-            if member.status in ['left', 'kicked']:
-                return False
-        except Exception as e:
-            logger.error(f"Error checking membership for @{channel}: {e}")
-            return False
+            if member.status in ['left', 'kicked']: return False
+        except: return False
     return True
 
 @bot.message_handler(commands=['ping'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە کاردەکات و سیستەمی VIP ئاکتیڤە!")
+    bot.reply_to(message, "✅ بۆتەکە بە دیزاینی ڕەنگاوڕەنگی نوێ ئۆنلاینە!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'sticker', 'animation', 'voice', 'video_note'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
-    # پشکنینی ئەوەی ئەگەر نامەکە لە کەناڵەوە هاتبێت یان یوزەری سپی بێت
     if getattr(message, 'is_automatic_forward', False): return
     if message.from_user.id == 777000 or (message.sender_chat and message.sender_chat.type == 'channel'): return
-
+    
     sender_username = (message.sender_chat.username if message.sender_chat else message.from_user.username)
     if sender_username and sender_username.lower() in WHITELIST: return 
 
     user_id = message.from_user.id
 
-    # ئەگەر ئەدمین بوو وازی لێ بهێنە
     try:
         group_member = bot.get_chat_member(message.chat.id, user_id)
         if group_member.status in ['creator', 'administrator']: return 
     except: pass
 
-    # ئەگەر جۆینی کردبوو وازی لێ بهێنە
     if check_membership(user_id): return
 
-    # سڕینەوەی نامەی یوزەرەکە چونکە جۆینی نەکردووە
-    try:
-        bot.delete_message(message.chat.id, message.message_id)
+    try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دروستکردنی دوگمەکان
-    markup = InlineKeyboardMarkup(row_width=2)
-    btns = [
-        InlineKeyboardButton("دراماکان 🎭", url="https://t.me/matounknowndrama"),
-        InlineKeyboardButton("هەواڵەکان 📰", url="https://t.me/kurdishrevolution1"),
-        InlineKeyboardButton("سێبەر تیڤی 📺", url="https://t.me/DOBLAZH_k")
-    ]
-    markup.add(btns[0], btns[1])
-    markup.add(btns[2], btns[3])
-    markup.row(InlineKeyboardButton("پشکنینی بەشداریکردن ✅", callback_data="check_join"))
+    # 🎨 دیزاینی دوگمە ڕەنگاوڕەنگەکان (ئەپدێتی نوێ)
+    markup = InlineKeyboardMarkup()
+    
+    # دوگمە شینەکان (Primary)
+    btn_drama = InlineKeyboardButton("🎭 دراماکان", url="https://t.me/matounknowndrama", style="primary")
+    btn_news = InlineKeyboardButton("📰 هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary")
+    btn_tv = InlineKeyboardButton("📺 سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary")
+    
+    markup.row(btn_drama, btn_news)
+    markup.add(btn_tv)
+    
+    # دوگمە سەوزەکە (Success)
+    check_btn = InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join", style="success")
+    markup.add(check_btn)
 
-    # 📝 نوسینی نامەی ئاگاداری بە شێوازی Blockquote
+    # 📝 نوسینی نامەکە (لینکە شینەکان)
     safe_name = html.escape(message.from_user.first_name)
     warning_text = (
-        f"<blockquote><b>👋 سڵاو {safe_name}</b>\n\n"
-        f"🛑 <b>بۆ ناردنی نامە، دەبێت سەرەتا لە چەناڵەکانی خوارەوە جۆین بیت.</b>\n\n"
-        f"⏳ <i>ئەم نامەیە دوای ٦٠ چرکە دەسڕێتەوە...</i></blockquote>"
+        f"<blockquote><b>👋 سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a></b>\n\n"
+        f"🛑 <b>بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانە بەشداربیت:</b>\n\n"
+        f"🔹 <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
+        f"🔹 <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
+        f"🔹 <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n\n"
+        f"⏳ <i>ئەم ئاگادارییە دوای ٦٠ چرکە دەسڕێتەوە.</i></blockquote>"
     )
 
     try:
-        # 🎭 ستیکەرە شازە نوێیەکەت
-        NEW_STICKER_ID = "CAACAgIAAxkBAAEDb-hp9JtEtBQHYDCWyUiLJttYj5TsggAC7p4AAgzfoUtgqj5FYt-8HTsE"
+        # 🎭 ئایدی ستیکەری کچە قژ سوورەکە
+        STICKER_ID = "CAACAgIAAxkBAAEDb-hp9JtEtBQHYDCWyUiLJttYj5TsggAC7p4AAgzfoUtgqj5FYt-8HTsE"
         
-        # ناردنی ستیکەر و پاشان نامەکە
-        sent_sticker = bot.send_sticker(message.chat.id, sticker=NEW_STICKER_ID)
-        sent_msg = bot.send_message(message.chat.id, warning_text, reply_markup=markup, parse_mode="HTML")
+        sent_sticker = bot.send_sticker(message.chat.id, sticker=STICKER_ID)
+        sent_msg = bot.send_message(message.chat.id, warning_text, reply_markup=markup, parse_mode="HTML", disable_web_page_preview=True)
         
-        # سڕینەوەی ئۆتۆماتیکی دوای خولەکێک
+        # سڕینەوەی ئۆتۆماتیکی
         threading.Timer(60.0, lambda: bot.delete_message(message.chat.id, sent_sticker.message_id)).start()
         threading.Timer(60.0, lambda: bot.delete_message(message.chat.id, sent_msg.message_id)).start()
         
     except Exception as e:
-        logger.error(f"Error in sending sequence: {e}")
+        logger.error(f"Error: {e}")
 
 @bot.callback_query_handler(func=lambda call: call.data == "check_join")
 def check_callback(call):
     if check_membership(call.from_user.id):
-        bot.answer_callback_query(call.id, "✅ سوپاس! ئێستا دەتوانیت نامە بنێریت.", show_alert=True)
+        bot.answer_callback_query(call.id, "✅ دەستخۆش! ئێستا دەتوانیت نامە بنێریت.", show_alert=True)
         try: bot.delete_message(call.message.chat.id, call.message.message_id)
         except: pass
     else:
-        bot.answer_callback_query(call.id, "❌ هێشتا جۆینی هەموو کەناڵەکانت نەکردووە!", show_alert=True)
+        bot.answer_callback_query(call.id, "❌ هێشتا لە هەموو کەناڵەکان بەشدار نیت!", show_alert=True)
 
-# 🌐 ڕێکخستنی Flask بۆ Webhook
+# 🌐 Flask & Webhook
 app = Flask(__name__)
-
 @app.route('/')
-def home(): return "Bot is Alive!"
-
+def home(): return "Bot is Online with Colors!"
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
