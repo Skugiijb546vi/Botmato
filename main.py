@@ -75,7 +75,6 @@ def handle_group_messages(message):
     # 🎨 دروستکردنی دوگمەکان
     markup = InlineKeyboardMarkup(row_width=2)
     btns = [
-        InlineKeyboardButton("نەزانراو ❓", url="https://t.me/Matounknown2"),
         InlineKeyboardButton("دراماکان 🎭", url="https://t.me/matounknowndrama"),
         InlineKeyboardButton("هەواڵەکان 📰", url="https://t.me/kurdishrevolution1"),
         InlineKeyboardButton("سێبەر تیڤی 📺", url="https://t.me/DOBLAZH_k")
