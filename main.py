@@ -58,7 +58,7 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان
+    # 🎨 دیزاینی دوگمەکان (تێلیگرام خۆی ڕەنگەکانیان بۆ جیا دەکاتەوە)
     markup = InlineKeyboardMarkup()
     btn_drama = InlineKeyboardButton("🥇 دراماکان 〰✈️", url="https://t.me/matounknowndrama")
     btn_news = InlineKeyboardButton("⬇️ 📰 هەواڵەکان", url="https://t.me/kurdishrevolution1")
@@ -68,10 +68,11 @@ def handle_group_messages(message):
     markup.add(btn_tv)
     markup.add(InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join"))
 
-    # 📝 نوسینی نامەکە بە ئیمۆجییە پرێمیۆمەکان و دیزاینەکەی خۆتەوە
+    # 📝 نوسینی نامەکە بە دیزاینە پرێمیۆمەکەی خۆتەوە
     safe_name = html.escape(message.from_user.first_name)
     
-    # ٨ ئیمۆجییە پرێمیۆمەکەی خوارەوە
+    # ئیمۆجییە پرێمیۆمەکان بە ئایدی
+    diamond = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
     down_arrows = (
         "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
         "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
@@ -88,9 +89,9 @@ def handle_group_messages(message):
         f"<b>━━━━━━━━━━━━━━</b>\n"
         f"<b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji><tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji></b>\n\n"
         f"<b>⬇️ بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانەی خوارەوە بەشداربیت:</b>\n\n"
-        f"💎 <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
-        f"💎 <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
-        f"💎 <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n\n"
+        f"{diamond} <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
+        f"{diamond} <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
+        f"{diamond} <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n\n"
         f"⏳ <i>ئەم ئاگادارییە دوای ٦٠ چرکە دەسڕێتەوە.</i>\n"
         f"{down_arrows}</blockquote>"
     )
