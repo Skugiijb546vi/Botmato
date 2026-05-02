@@ -17,7 +17,7 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com"
 
 bot = telebot.TeleBot(TOKEN)
 
-# 📢 لیستی چەناڵەکان (نەزانراو لادرا)
+# 📢 لیستی چەناڵەکان
 CHANNELS = [
     "matounknowndrama",
     "kurdishrevolution1",
@@ -37,7 +37,7 @@ def check_membership(user_id):
 
 @bot.message_handler(commands=['ping'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە بە دیزاینی ڕەنگاوڕەنگی نوێ ئۆنلاینە!")
+    bot.reply_to(message, "✅ بۆتەکە بە دیزاینی ڕەنگاوڕەنگ و ئیمۆجی پرێمیۆمەوە ئۆنلاینە!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'sticker', 'animation', 'voice', 'video_note'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
@@ -59,10 +59,9 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمە ڕەنگاوڕەنگەکان (ئەپدێتی نوێ)
+    # 🎨 دیزاینی دوگمە ڕەنگاوڕەنگەکان
     markup = InlineKeyboardMarkup()
     
-    # دوگمە شینەکان (Primary)
     btn_drama = InlineKeyboardButton("🎭 دراماکان", url="https://t.me/matounknowndrama", style="primary")
     btn_news = InlineKeyboardButton("📰 هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary")
     btn_tv = InlineKeyboardButton("📺 سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary")
@@ -70,14 +69,13 @@ def handle_group_messages(message):
     markup.row(btn_drama, btn_news)
     markup.add(btn_tv)
     
-    # دوگمە سەوزەکە (Success)
     check_btn = InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join", style="success")
     markup.add(check_btn)
 
-    # 📝 نوسینی نامەکە (لینکە شینەکان)
+    # 📝 نوسینی نامەکە بە ئیمۆجی پرێمیۆمەوە
     safe_name = html.escape(message.from_user.first_name)
     warning_text = (
-        f"<blockquote><b>👋 سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a></b>\n\n"
+        f"<blockquote><b><tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji><tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji> سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a></b>\n\n"
         f"🛑 <b>بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانە بەشداربیت:</b>\n\n"
         f"🔹 <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
         f"🔹 <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
@@ -111,7 +109,7 @@ def check_callback(call):
 # 🌐 Flask & Webhook
 app = Flask(__name__)
 @app.route('/')
-def home(): return "Bot is Online with Colors!"
+def home(): return "Bot is Online with Premium Emojis!"
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
