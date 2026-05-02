@@ -72,14 +72,14 @@ def handle_group_messages(message):
     check_btn = InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join", style="success")
     markup.add(check_btn)
 
-    # 📝 نوسینی نامەکە بە ئیمۆجی پرێمیۆمەوە
+    # 📝 نوسینی نامەکە بە دیزاینە نوێیە پرێمیۆمەکەوە
     safe_name = html.escape(message.from_user.first_name)
     warning_text = (
-        f"<blockquote><b><tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji><tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji> سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a></b>\n\n"
-        f"🛑 <b>بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانە بەشداربیت:</b>\n\n"
-        f"🔹 <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
-        f"🔹 <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
-        f"🔹 <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n\n"
+        f"<blockquote><b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji><tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji></b>\n\n"
+        f"<b><tg-emoji emoji-id='5796664978542956370'>⬇️</tg-emoji> بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانە بەشداربیت:</b>\n\n"
+        f"<tg-emoji emoji-id='5798505243180273024'>💎</tg-emoji> <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
+        f"<tg-emoji emoji-id='5798505243180273024'>💎</tg-emoji> <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
+        f"<tg-emoji emoji-id='5798505243180273024'>💎</tg-emoji> <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n\n"
         f"⏳ <i>ئەم ئاگادارییە دوای ٦٠ چرکە دەسڕێتەوە.</i></blockquote>"
     )
 
