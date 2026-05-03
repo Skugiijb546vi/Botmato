@@ -76,6 +76,7 @@ def handle_group_messages(message):
     # ئیمۆجییە پرێمیۆمەکان بە ئایدی
     diamond_list = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
     new_arrow = "<tg-emoji emoji-id='5796205953913196373'>💎</tg-emoji>"
+    hourglass = "<tg-emoji emoji-id='5454415424319931791'>⌛️</tg-emoji>"
     down_arrows = "".join(["<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"] * 8)
 
     warning_text = (
@@ -85,7 +86,7 @@ def handle_group_messages(message):
         f"{diamond_list} <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
         f"{diamond_list} <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n"
         f"{diamond_list} <a href='https://t.me/kurd_cinema5'>@kurd_cinema5</a>\n\n"
-        f"⏳ <i>ئەم ئاگادارییە دوای ٣ خولەک دەسڕێتەوە.</i>\n\n"
+        f"{hourglass} <i>ئەم ئاگادارییە دوای ٣ خولەک دەسڕێتەوە.</i>\n\n"
         f"{down_arrows}</blockquote>"
     )
 
