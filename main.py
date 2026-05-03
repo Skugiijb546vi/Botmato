@@ -61,8 +61,8 @@ def handle_group_messages(message):
 
     # 🎨 دیزاینی دوگمەکان
     markup = InlineKeyboardMarkup()
-    CHANNEL_EMOJI_ID = "5330237710655306682" # ئیمۆجی مۆبایلەکە
-    CHECK_EMOJI_ID = "5803042712919741226"   # ئیمۆجی ڕاستە پرێمیۆمەکە
+    CHANNEL_EMOJI_ID = "5330237710655306682" 
+    CHECK_EMOJI_ID = "5803042712919741226"   
     
     btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
     btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
@@ -76,23 +76,22 @@ def handle_group_messages(message):
     # 📝 نوسینی نامەکە
     safe_name = html.escape(message.from_user.first_name)
     
-    # دروستکردنی ناوی بۆتەکە بە ئیمۆجییە پرێمیۆمەکان
+    # چارەسەرکردنی هەڵەی ناوی بۆتەکە (گۆڕینی پیتەکان بۆ ئیمۆجی ئەسڵییەکە)
     bot_title = (
-        "<tg-emoji emoji-id='5332321341024508571'>M</tg-emoji>"
-        "<tg-emoji emoji-id='5226734466315067436'>A</tg-emoji>"
-        "<tg-emoji emoji-id='5332558333024934589'>T</tg-emoji>"
-        "<tg-emoji emoji-id='5361583176550457135'>O</tg-emoji>"
+        "<tg-emoji emoji-id='5332321341024508571'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5226734466315067436'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5332558333024934589'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5361583176550457135'>🔤</tg-emoji>"
         "<tg-emoji emoji-id='5868288832423598572'>🥇</tg-emoji> "
-        "<tg-emoji emoji-id='5330453760395191684'>B</tg-emoji>"
-        "<tg-emoji emoji-id='5361583176550457135'>O</tg-emoji>"
-        "<tg-emoji emoji-id='5332558333024934589'>T</tg-emoji>"
+        "<tg-emoji emoji-id='5330453760395191684'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5361583176550457135'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5332558333024934589'>🔤</tg-emoji>"
     )
 
     new_arrow = "<tg-emoji emoji-id='5796205953913196373'>💎</tg-emoji>"
     hourglass = "<tg-emoji emoji-id='5454415424319931791'>⌛️</tg-emoji>"
     down_arrows = "".join(["<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"] * 8)
 
-    # نامەکە بەبێ هێڵەکانی (@) و بە ناوی جوڵاوەوە
     warning_text = (
         f"<blockquote><b>{bot_title}</b>\n\n"
         f"<b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji><tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji></b>\n\n"
