@@ -18,13 +18,7 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com"
 bot = telebot.TeleBot(TOKEN)
 
 # 📢 لیستی چەناڵەکان
-CHANNELS = [
-    "matounknowndrama",
-    "kurdishrevolution1",
-    "DOBLAZH_k",
-    "kurd_cinema5"
-]
-
+CHANNELS = ["matounknowndrama", "kurdishrevolution1", "DOBLAZH_k", "kurd_cinema5"]
 WHITELIST = {"matounknowngroup", "matodarklove"}
 
 def check_membership(user_id):
@@ -34,6 +28,86 @@ def check_membership(user_id):
             if member.status in ['left', 'kicked']: return False
         except: return False
     return True
+
+# 🎨 فەنکشنی دروستکردنی دوگمەکان (بۆ ئەوەی چەند جارێک بەکاری بهێنینەوە)
+def get_markup():
+    markup = InlineKeyboardMarkup()
+    ID_DRAMA = "6041896723402461093"  
+    ID_NEWS = "5447410659077661506"   
+    ID_TV = "5872902507767796382"     
+    ID_CINEMA = "6014605109634274095" # 🌐
+    ID_CHECK = "5803042712919741226"  
+    
+    btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id=ID_DRAMA)
+    btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id=ID_NEWS)
+    btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary", icon_custom_emoji_id=ID_TV)
+    btn_cinema = InlineKeyboardButton("سینەما", url="https://t.me/kurd_cinema5", style="primary", icon_custom_emoji_id=ID_CINEMA)
+    
+    markup.row(btn_drama, btn_news)
+    markup.row(btn_tv, btn_cinema)
+    markup.add(InlineKeyboardButton("پشکنینی بەشداریکردن", callback_data="check_join", style="success", icon_custom_emoji_id=ID_CHECK))
+    return markup
+
+# 📝 فەنکشنی دیزاینی بلیتی VIP و نامەکە
+def build_vip_text(user_id, safe_name, time_str):
+    bot_title = (
+        "<tg-emoji emoji-id='5332321341024508571'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5226734466315067436'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5332558333024934589'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5361583176550457135'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5868288832423598572'>🥇</tg-emoji> "
+        "<tg-emoji emoji-id='5330453760395191684'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5361583176550457135'>🔤</tg-emoji>"
+        "<tg-emoji emoji-id='5332558333024934589'>🔤</tg-emoji>"
+    )
+    new_arrow = "<tg-emoji emoji-id='5796205953913196373'>💎</tg-emoji>"
+    down_arrows = "".join(["<tg-emoji emoji-id='5803120932864136855'>⬇️</tg-emoji>"] * 10)
+
+    text = (
+        f"<blockquote><b>{bot_title}</b>\n\n"
+        f"<b>╔════ 🎫 VIP PASS 🎫 ════╗</b>\n"
+        f"<b>║</b> 👤 <b>پاشا:</b> <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji>\n"
+        f"<b>║</b> 🔒 <b>پێگە:</b> <i>چاوەڕێی پشکنین...</i>\n"
+        f"<b>║</b> ⏳ <b>کاتی ماوە:</b> <code>{time_str}</code>\n"
+        f"<b>╚═════════════════════╝</b>\n\n"
+        f"<b>{new_arrow} بۆ کردنەوەی قفڵەکان، بەشداربە لێرە:</b>\n\n"
+        f"<tg-emoji emoji-id='6041896723402461093'>🥇</tg-emoji><tg-emoji emoji-id='6042060438965850883'>📱</tg-emoji> <b>دراماکان</b>\n"
+        f"<tg-emoji emoji-id='5447410659077661506'>🌐</tg-emoji><tg-emoji emoji-id='5424818078833715060'>📣</tg-emoji> <b>هەواڵەکان</b>\n"
+        f"<tg-emoji emoji-id='5872902507767796382'>📺</tg-emoji> <b>سێبەر تیڤی</b>\n"
+        f"<tg-emoji emoji-id='6014605109634274095'>🌐</tg-emoji> <b>سینەما</b>\n\n"
+        f"{down_arrows}</blockquote>"
+    )
+    return text
+
+# ⏳ فەنکشنی ژمێریاری زیندوو (Live Countdown)
+def live_countdown(chat_id, message_id, sticker_id, user_id, safe_name):
+    markup = get_markup()
+    # ژماردن لە ١٨٠ چرکەوە (٣ خولەک) تا ٠، هەموو ١٠ چرکە جارێک نامەکە نوێ دەبێتەوە
+    for t in range(170, -1, -10):
+        time.sleep(10)
+        mins, secs = divmod(t, 60)
+        time_str = f"{mins:02d}:{secs:02d}"
+        
+        try:
+            bot.edit_message_text(
+                chat_id=chat_id, 
+                message_id=message_id, 
+                text=build_vip_text(user_id, safe_name, time_str), 
+                reply_markup=markup, 
+                parse_mode="HTML", 
+                disable_web_page_preview=True
+            )
+        except Exception as e:
+            # ئەگەر بەکارهێنەر پشکنینی کرد و نامەکە سڕایەوە، پرۆسەکە بە زیرەکی دەوەستێت
+            if "not found" in str(e).lower() or "not modified" in str(e).lower():
+                break
+            
+    # کاتێک کاتەکە تەواو بوو (٠٠:٠٠)، خۆکارانە نامەکە و ستیکەرەکە دەسڕێتەوە
+    try:
+        bot.delete_message(chat_id, sticker_id)
+        bot.delete_message(chat_id, message_id)
+    except:
+        pass
 
 @bot.message_handler(commands=['ping'])
 def test_bot(message):
@@ -59,59 +133,18 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان
-    markup = InlineKeyboardMarkup()
-    
-    # ئایدییەکان وەک خۆت داوات کرد
-    ID_DRAMA = "6041896723402461093"  # 🥇
-    ID_NEWS = "5447410659077661506"   # 🌐
-    ID_TV = "5872902507767796382"     # 📺
-    ID_CINEMA = "6014605109634274095" # 🌐 ئەمەیان نوێیە کە لەبری پۆپکۆرن و مەدالیاکە داتنا
-    ID_CHECK = "5803042712919741226"  # ✅
-    
-    btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id=ID_DRAMA)
-    btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id=ID_NEWS)
-    btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary", icon_custom_emoji_id=ID_TV)
-    btn_cinema = InlineKeyboardButton("سینەما", url="https://t.me/kurd_cinema5", style="primary", icon_custom_emoji_id=ID_CINEMA)
-    
-    markup.row(btn_drama, btn_news)
-    markup.row(btn_tv, btn_cinema)
-    markup.add(InlineKeyboardButton("پشکنینی بەشداریکردن", callback_data="check_join", style="success", icon_custom_emoji_id=ID_CHECK))
-
-    # 📝 نوسینی نامەکە
     safe_name = html.escape(message.from_user.first_name)
-    
-    bot_title = (
-        "<tg-emoji emoji-id='5332321341024508571'>🔤</tg-emoji>"
-        "<tg-emoji emoji-id='5226734466315067436'>🔤</tg-emoji>"
-        "<tg-emoji emoji-id='5332558333024934589'>🔤</tg-emoji>"
-        "<tg-emoji emoji-id='5361583176550457135'>🔤</tg-emoji>"
-        "<tg-emoji emoji-id='5868288832423598572'>🥇</tg-emoji> "
-        "<tg-emoji emoji-id='5330453760395191684'>🔤</tg-emoji>"
-        "<tg-emoji emoji-id='5361583176550457135'>🔤</tg-emoji>"
-        "<tg-emoji emoji-id='5332558333024934589'>🔤</tg-emoji>"
-    )
-
-    new_arrow = "<tg-emoji emoji-id='5796205953913196373'>💎</tg-emoji>"
-    hourglass = "<tg-emoji emoji-id='5454415424319931791'>⌛️</tg-emoji>"
-    down_arrows = "".join(["<tg-emoji emoji-id='5803120932864136855'>⬇️</tg-emoji>"] * 10)
-
-    warning_text = (
-        f"<blockquote><b>{bot_title}</b>\n\n"
-        f"<b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji><tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji></b>\n\n"
-        f"<b>{new_arrow} بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانەی خوارەوە بەشداربیت:</b>\n\n"
-        f"{hourglass} <i>ئەم ئاگادارییە دوای ٣ خولەک دەسڕێتەوە.</i>\n\n"
-        f"{down_arrows}</blockquote>"
-    )
 
     try:
         STICKER_ID = "CAACAgIAAxkBAAEDb-hp9JtEtBQHYDCWyUiLJttYj5TsggAC7p4AAgzfoUtgqj5FYt-8HTsE"
-        
         sent_sticker = bot.send_sticker(message.chat.id, sticker=STICKER_ID)
-        sent_msg = bot.send_message(message.chat.id, warning_text, reply_markup=markup, parse_mode="HTML", disable_web_page_preview=True)
         
-        threading.Timer(180.0, lambda: bot.delete_message(message.chat.id, sent_sticker.message_id)).start()
-        threading.Timer(180.0, lambda: bot.delete_message(message.chat.id, sent_msg.message_id)).start()
+        # ناردنی نامەی سەرەتایی بە کاتی (03:00)
+        initial_text = build_vip_text(user_id, safe_name, "03:00")
+        sent_msg = bot.send_message(message.chat.id, initial_text, reply_markup=get_markup(), parse_mode="HTML", disable_web_page_preview=True)
+        
+        # کارپێکردنی مێشکی زیرەک (Thread) بۆ ژماردنی کاتەکە
+        threading.Thread(target=live_countdown, args=(message.chat.id, sent_msg.message_id, sent_sticker.message_id, user_id, safe_name)).start()
         
     except Exception as e:
         logger.error(f"Error: {e}")
@@ -128,7 +161,7 @@ def check_callback(call):
 # 🌐 Flask & Webhook
 app = Flask(__name__)
 @app.route('/')
-def home(): return "Bot is Online and fully customized!"
+def home(): return "Bot is Live with VIP Pass & Live Countdown!"
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
