@@ -59,20 +59,26 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان بە ئیمۆجی جوڵاوەکانەوە (کێشەی نەجوڵان چارەسەر کرا)
+    # 🎨 دیزاینی دوگمەکان
     markup = InlineKeyboardMarkup()
     
-    # خستنەوەی ئایدییەکان کە لەبیرم چوو بوو!
-    btn_drama = InlineKeyboardButton("دراماکان 📱", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id="6041896723402461093")
-    btn_news = InlineKeyboardButton("هەواڵەکان 📣", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id="5447410659077661506")
-    btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary", icon_custom_emoji_id="5872902507767796382")
-    btn_cinema = InlineKeyboardButton("سینەما 🍿", url="https://t.me/kurd_cinema5", style="primary") # سینەما ئایدی نەبوو بۆیە وەک تێکست دانرا
+    # ئایدییەکان وەک خۆت داوات کرد
+    ID_DRAMA = "6041896723402461093"  # 🥇
+    ID_NEWS = "5447410659077661506"   # 🌐
+    ID_TV = "5872902507767796382"     # 📺
+    ID_CINEMA = "6014605109634274095" # 🌐 ئەمەیان نوێیە کە لەبری پۆپکۆرن و مەدالیاکە داتنا
+    ID_CHECK = "5803042712919741226"  # ✅
+    
+    btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id=ID_DRAMA)
+    btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id=ID_NEWS)
+    btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary", icon_custom_emoji_id=ID_TV)
+    btn_cinema = InlineKeyboardButton("سینەما", url="https://t.me/kurd_cinema5", style="primary", icon_custom_emoji_id=ID_CINEMA)
     
     markup.row(btn_drama, btn_news)
     markup.row(btn_tv, btn_cinema)
-    markup.add(InlineKeyboardButton("پشکنینی بەشداریکردن", callback_data="check_join", style="success", icon_custom_emoji_id="5803042712919741226"))
+    markup.add(InlineKeyboardButton("پشکنینی بەشداریکردن", callback_data="check_join", style="success", icon_custom_emoji_id=ID_CHECK))
 
-    # 📝 نوسینی نامەکە (سڕینەوەی چەناڵەکان وەک داوات کرد)
+    # 📝 نوسینی نامەکە
     safe_name = html.escape(message.from_user.first_name)
     
     bot_title = (
@@ -90,7 +96,6 @@ def handle_group_messages(message):
     hourglass = "<tg-emoji emoji-id='5454415424319931791'>⌛️</tg-emoji>"
     down_arrows = "".join(["<tg-emoji emoji-id='5803120932864136855'>⬇️</tg-emoji>"] * 10)
 
-    # نامەیەکی کورت، خاوێن و بێ قەرەباڵغی
     warning_text = (
         f"<blockquote><b>{bot_title}</b>\n\n"
         f"<b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji><tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji></b>\n\n"
@@ -123,7 +128,7 @@ def check_callback(call):
 # 🌐 Flask & Webhook
 app = Flask(__name__)
 @app.route('/')
-def home(): return "Bot is Online and finally perfect!"
+def home(): return "Bot is Online and fully customized!"
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
