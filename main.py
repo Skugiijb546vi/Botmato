@@ -59,16 +59,16 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان (بە ئیمۆجییە جوڵاوە ئاساییەکانی تێلیگرامەوە)
+    # 🎨 دیزاینی دوگمەکان (بە فێڵی یونیکۆدی تێلیگرام بۆ جوڵانەوە)
     markup = InlineKeyboardMarkup()
-    btn_drama = InlineKeyboardButton("🚀 دراماکان 🎬", url="https://t.me/matounknowndrama", style="primary")
-    btn_news = InlineKeyboardButton("🔥 هەواڵەکان 📰", url="https://t.me/kurdishrevolution1", style="primary")
-    btn_tv = InlineKeyboardButton("🌟 سێبەر تیڤی 📺", url="https://t.me/DOBLAZH_k", style="primary")
-    btn_cinema = InlineKeyboardButton("🍿 سینەما 🎥", url="https://t.me/kurd_cinema5", style="primary")
+    btn_drama = InlineKeyboardButton("\U0001F680 دراماکان \U0001F3AC", url="https://t.me/matounknowndrama", style="primary")
+    btn_news = InlineKeyboardButton("\U0001F525 هەواڵەکان \U0001F4F0", url="https://t.me/kurdishrevolution1", style="primary")
+    btn_tv = InlineKeyboardButton("\U0001F31F سێبەر تیڤی \U0001F4FA", url="https://t.me/DOBLAZH_k", style="primary")
+    btn_cinema = InlineKeyboardButton("\U0001F37F سینەما \U0001F3A5", url="https://t.me/kurd_cinema5", style="primary")
     
     markup.row(btn_drama, btn_news)
     markup.row(btn_tv, btn_cinema)
-    markup.add(InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join", style="success"))
+    markup.add(InlineKeyboardButton("\u2705 پشکنینی بەشداریکردن", callback_data="check_join", style="success"))
 
     # 📝 نوسینی نامەکە (هەمووی بە پرێمیۆم ماوەتەوە وەک خۆت داتنابوو)
     safe_name = html.escape(message.from_user.first_name)
