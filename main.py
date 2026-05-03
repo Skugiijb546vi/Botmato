@@ -59,20 +59,23 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان (ڕێک بەو فێڵەی خۆت دۆزیتەوە)
+    # 🎨 دیزاینی دوگمەکان (شین و سەوز گەڕێنرانەوە لەگەڵ ئیمۆجییە پرێمیۆمەکان)
     markup = InlineKeyboardMarkup()
-    CUSTOM_ID = "5330237710655306682" # ئایدییە پرێمیۆمەکەی خۆت کە ناردت
+    CHANNEL_EMOJI_ID = "5330237710655306682" # ئیمۆجی مۆبایلەکە بۆ چەناڵەکان
+    CHECK_EMOJI_ID = "5803042712919741226"   # ئیمۆجی ڕاستە پرێمیۆمەکە بۆ پشکنین
     
-    btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", icon_custom_emoji_id=CUSTOM_ID)
-    btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", icon_custom_emoji_id=CUSTOM_ID)
-    btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", icon_custom_emoji_id=CUSTOM_ID)
-    btn_cinema = InlineKeyboardButton("سینەما", url="https://t.me/kurd_cinema5", icon_custom_emoji_id=CUSTOM_ID)
+    btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
+    btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
+    btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
+    btn_cinema = InlineKeyboardButton("سینەما", url="https://t.me/kurd_cinema5", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
     
     markup.row(btn_drama, btn_news)
     markup.row(btn_tv, btn_cinema)
-    markup.add(InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join"))
+    
+    # دوگمەی پشکنین بە سەوزی و ئیمۆجییە نوێیەکەوە
+    markup.add(InlineKeyboardButton("پشکنینی بەشداریکردن", callback_data="check_join", style="success", icon_custom_emoji_id=CHECK_EMOJI_ID))
 
-    # 📝 نوسینی نامەکە بە دیزاینە بێخەوشەکەوە
+    # 📝 نوسینی نامەکە
     safe_name = html.escape(message.from_user.first_name)
     
     diamond_list = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
