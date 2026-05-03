@@ -17,7 +17,7 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com"
 
 bot = telebot.TeleBot(TOKEN)
 
-# 📢 لیستی چەناڵەکان (سینەما زیاد کرا)
+# 📢 لیستی چەناڵەکان
 CHANNELS = [
     "matounknowndrama",
     "kurdishrevolution1",
@@ -37,7 +37,7 @@ def check_membership(user_id):
 
 @bot.message_handler(commands=['ping'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە بە دیزاینە کامڵەکەوە ئۆنلاینە!")
+    bot.reply_to(message, "✅ بۆتەکە بەبێ کێشە کار دەکات!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'sticker', 'animation', 'voice', 'video_note'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
@@ -59,36 +59,31 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان (شین بۆ کەناڵەکان، سەوز بۆ پشکنین)
+    # 🎨 دیزاینی دوگمەکان
     markup = InlineKeyboardMarkup()
     btn_drama = InlineKeyboardButton("🥇 دراماکان 〰✈️", url="https://t.me/matounknowndrama", style="primary")
     btn_news = InlineKeyboardButton("⬇️ 📰 هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary")
     btn_tv = InlineKeyboardButton("⬇️ 📺 سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary")
     btn_cinema = InlineKeyboardButton("⬇️ 🎬 سینەما", url="https://t.me/kurd_cinema5", style="primary")
     
-    # ڕیزکردنی دوگمەکان (دوو بە دوو بۆ جوانی)
     markup.row(btn_drama, btn_news)
     markup.row(btn_tv, btn_cinema)
-    
-    # دوگمەی پشکنین
     markup.add(InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join", style="success"))
 
-    # 📝 نوسینی نامەکە بە ئیمۆجییە پرێمیۆمەکان و بۆشاییەکانەوە
+    # 📝 نوسینی نامەکە
     safe_name = html.escape(message.from_user.first_name)
     
     diamond = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
     down_arrows = "".join(["<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"] * 8)
 
     warning_text = (
-        f"<blockquote><b>MATO 👑🥇 BOT</b>\n"
-        f"<b>━━━━━━━━━━━━━━</b>\n"
-        f"<b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji><tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji></b>\n\n"
+        f"<blockquote><b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji><tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji></b>\n\n"
         f"<b>⬇️ بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانەی خوارەوە بەشداربیت:</b>\n\n"
         f"{diamond} <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
         f"{diamond} <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
         f"{diamond} <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n"
         f"{diamond} <a href='https://t.me/kurd_cinema5'>@kurd_cinema5</a>\n\n"
-        f"⏳ <i>ئەم ئاگادارییە دوای ٦٠ چرکە دەسڕێتەوە.</i>\n\n"
+        f"⏳ <i>ئەم ئاگادارییە دوای ٣ خولەک دەسڕێتەوە.</i>\n\n"
         f"{down_arrows}</blockquote>"
     )
 
@@ -98,8 +93,9 @@ def handle_group_messages(message):
         sent_sticker = bot.send_sticker(message.chat.id, sticker=STICKER_ID)
         sent_msg = bot.send_message(message.chat.id, warning_text, reply_markup=markup, parse_mode="HTML", disable_web_page_preview=True)
         
-        threading.Timer(60.0, lambda: bot.delete_message(message.chat.id, sent_sticker.message_id)).start()
-        threading.Timer(60.0, lambda: bot.delete_message(message.chat.id, sent_msg.message_id)).start()
+        # گۆڕینی کاتەکە بۆ ١٨٠ چرکە (سێ خولەک)
+        threading.Timer(180.0, lambda: bot.delete_message(message.chat.id, sent_sticker.message_id)).start()
+        threading.Timer(180.0, lambda: bot.delete_message(message.chat.id, sent_msg.message_id)).start()
         
     except Exception as e:
         logger.error(f"Error: {e}")
