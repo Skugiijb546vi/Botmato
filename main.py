@@ -17,11 +17,12 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com"
 
 bot = telebot.TeleBot(TOKEN)
 
-# 📢 لیستی چەناڵەکان
+# 📢 لیستی چەناڵەکان (سینەما زیاد کرا)
 CHANNELS = [
     "matounknowndrama",
     "kurdishrevolution1",
-    "DOBLAZH_k"
+    "DOBLAZH_k",
+    "kurd_cinema5"
 ]
 
 WHITELIST = {"matounknowngroup", "matodarklove"}
@@ -36,7 +37,7 @@ def check_membership(user_id):
 
 @bot.message_handler(commands=['ping'])
 def test_bot(message):
-    bot.reply_to(message, "✅ بۆتەکە بەبێ کێشە کار دەکات!")
+    bot.reply_to(message, "✅ بۆتەکە بە دیزاینە کامڵەکەوە ئۆنلاینە!")
 
 @bot.message_handler(content_types=['text', 'photo', 'video', 'sticker', 'animation', 'voice', 'video_note'], func=lambda message: message.chat.type in ['group', 'supergroup'])
 def handle_group_messages(message):
@@ -58,31 +59,25 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان (تێلیگرام خۆی ڕەنگەکانیان بۆ جیا دەکاتەوە)
+    # 🎨 دیزاینی دوگمەکان (شین بۆ کەناڵەکان، سەوز بۆ پشکنین)
     markup = InlineKeyboardMarkup()
-    btn_drama = InlineKeyboardButton("🥇 دراماکان 〰✈️", url="https://t.me/matounknowndrama")
-    btn_news = InlineKeyboardButton("⬇️ 📰 هەواڵەکان", url="https://t.me/kurdishrevolution1")
-    btn_tv = InlineKeyboardButton("⬇️ 📺 سێبەر تیڤی", url="https://t.me/DOBLAZH_k")
+    btn_drama = InlineKeyboardButton("🥇 دراماکان 〰✈️", url="https://t.me/matounknowndrama", style="primary")
+    btn_news = InlineKeyboardButton("⬇️ 📰 هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary")
+    btn_tv = InlineKeyboardButton("⬇️ 📺 سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary")
+    btn_cinema = InlineKeyboardButton("⬇️ 🎬 سینەما", url="https://t.me/kurd_cinema5", style="primary")
     
+    # ڕیزکردنی دوگمەکان (دوو بە دوو بۆ جوانی)
     markup.row(btn_drama, btn_news)
-    markup.add(btn_tv)
-    markup.add(InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join"))
+    markup.row(btn_tv, btn_cinema)
+    
+    # دوگمەی پشکنین
+    markup.add(InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join", style="success"))
 
-    # 📝 نوسینی نامەکە بە دیزاینە پرێمیۆمەکەی خۆتەوە
+    # 📝 نوسینی نامەکە بە ئیمۆجییە پرێمیۆمەکان و بۆشاییەکانەوە
     safe_name = html.escape(message.from_user.first_name)
     
-    # ئیمۆجییە پرێمیۆمەکان بە ئایدی
     diamond = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
-    down_arrows = (
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-        "<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"
-    )
+    down_arrows = "".join(["<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"] * 8)
 
     warning_text = (
         f"<blockquote><b>MATO 👑🥇 BOT</b>\n"
@@ -91,8 +86,9 @@ def handle_group_messages(message):
         f"<b>⬇️ بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانەی خوارەوە بەشداربیت:</b>\n\n"
         f"{diamond} <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
         f"{diamond} <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
-        f"{diamond} <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n\n"
-        f"⏳ <i>ئەم ئاگادارییە دوای ٦٠ چرکە دەسڕێتەوە.</i>\n"
+        f"{diamond} <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n"
+        f"{diamond} <a href='https://t.me/kurd_cinema5'>@kurd_cinema5</a>\n\n"
+        f"⏳ <i>ئەم ئاگادارییە دوای ٦٠ چرکە دەسڕێتەوە.</i>\n\n"
         f"{down_arrows}</blockquote>"
     )
 
@@ -120,7 +116,7 @@ def check_callback(call):
 # 🌐 Flask & Webhook
 app = Flask(__name__)
 @app.route('/')
-def home(): return "Bot is Online!"
+def home(): return "Bot is Online and fully customized!"
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
