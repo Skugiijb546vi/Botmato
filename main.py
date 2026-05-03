@@ -59,15 +59,14 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان
+    # 🎨 دیزاینی دوگمەکان (بە ئیمۆجییەکانەوە لە دەستە ڕاست)
     markup = InlineKeyboardMarkup()
-    CHANNEL_EMOJI_ID = "5330237710655306682" 
-    CHECK_EMOJI_ID = "5803042712919741226"   
+    CHECK_EMOJI_ID = "5803042712919741226"   # ئیمۆجی پشکنین
     
-    btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
-    btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
-    btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
-    btn_cinema = InlineKeyboardButton("سینەما", url="https://t.me/kurd_cinema5", style="primary", icon_custom_emoji_id=CHANNEL_EMOJI_ID)
+    btn_drama = InlineKeyboardButton("🥇📱 دراماکان", url="https://t.me/matounknowndrama", style="primary")
+    btn_news = InlineKeyboardButton("🌐📣 هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary")
+    btn_tv = InlineKeyboardButton("📺 سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary")
+    btn_cinema = InlineKeyboardButton("🍿 سینەما", url="https://t.me/kurd_cinema5", style="primary")
     
     markup.row(btn_drama, btn_news)
     markup.row(btn_tv, btn_cinema)
@@ -76,7 +75,6 @@ def handle_group_messages(message):
     # 📝 نوسینی نامەکە
     safe_name = html.escape(message.from_user.first_name)
     
-    # چارەسەرکردنی هەڵەی ناوی بۆتەکە (گۆڕینی پیتەکان بۆ ئیمۆجی ئەسڵییەکە)
     bot_title = (
         "<tg-emoji emoji-id='5332321341024508571'>🔤</tg-emoji>"
         "<tg-emoji emoji-id='5226734466315067436'>🔤</tg-emoji>"
@@ -90,12 +88,18 @@ def handle_group_messages(message):
 
     new_arrow = "<tg-emoji emoji-id='5796205953913196373'>💎</tg-emoji>"
     hourglass = "<tg-emoji emoji-id='5454415424319931791'>⌛️</tg-emoji>"
-    down_arrows = "".join(["<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"] * 8)
+    
+    # ١٠ دانە لە ئیمۆجییە نوێیەکەی خوارەوە
+    down_arrows = "".join(["<tg-emoji emoji-id='5803120932864136855'>⬇️</tg-emoji>"] * 10)
 
     warning_text = (
         f"<blockquote><b>{bot_title}</b>\n\n"
         f"<b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji><tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji></b>\n\n"
         f"<b>{new_arrow} بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانەی خوارەوە بەشداربیت:</b>\n\n"
+        f"<tg-emoji emoji-id='6041896723402461093'>🥇</tg-emoji><tg-emoji emoji-id='6042060438965850883'>📱</tg-emoji> <b>دراماکان</b>\n"
+        f"<tg-emoji emoji-id='5447410659077661506'>🌐</tg-emoji><tg-emoji emoji-id='5424818078833715060'>📣</tg-emoji> <b>هەواڵەکان</b>\n"
+        f"<tg-emoji emoji-id='5872902507767796382'>📺</tg-emoji> <b>سێبەر تیڤی</b>\n"
+        f"🍿 <b>سینەما</b>\n\n"
         f"{hourglass} <i>ئەم ئاگادارییە دوای ٣ خولەک دەسڕێتەوە.</i>\n\n"
         f"{down_arrows}</blockquote>"
     )
@@ -124,7 +128,7 @@ def check_callback(call):
 # 🌐 Flask & Webhook
 app = Flask(__name__)
 @app.route('/')
-def home(): return "Bot is Online and cleaner than ever!"
+def home(): return "Bot is VIP!"
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
