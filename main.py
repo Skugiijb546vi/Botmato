@@ -73,16 +73,18 @@ def handle_group_messages(message):
     # 📝 نوسینی نامەکە
     safe_name = html.escape(message.from_user.first_name)
     
-    diamond = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
+    # ئیمۆجییە پرێمیۆمەکان بە ئایدی
+    diamond_list = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
+    new_arrow = "<tg-emoji emoji-id='5796205953913196373'>💎</tg-emoji>"
     down_arrows = "".join(["<tg-emoji emoji-id='5373260879095686059'>🔽</tg-emoji>"] * 8)
 
     warning_text = (
-        f"<blockquote><b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji><tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji></b>\n\n"
-        f"<b>⬇️ بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانەی خوارەوە بەشداربیت:</b>\n\n"
-        f"{diamond} <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
-        f"{diamond} <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
-        f"{diamond} <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n"
-        f"{diamond} <a href='https://t.me/kurd_cinema5'>@kurd_cinema5</a>\n\n"
+        f"<blockquote><b>سڵاو <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji><tg-emoji emoji-id='5859691201250201986'>👋</tg-emoji></b>\n\n"
+        f"<b>{new_arrow} بۆ ناردنی نامە، دەبێت سەرەتا لەم چەناڵانەی خوارەوە بەشداربیت:</b>\n\n"
+        f"{diamond_list} <a href='https://t.me/matounknowndrama'>@matounknowndrama</a>\n"
+        f"{diamond_list} <a href='https://t.me/kurdishrevolution1'>@kurdishrevolution1</a>\n"
+        f"{diamond_list} <a href='https://t.me/DOBLAZH_k'>@DOBLAZH_k</a>\n"
+        f"{diamond_list} <a href='https://t.me/kurd_cinema5'>@kurd_cinema5</a>\n\n"
         f"⏳ <i>ئەم ئاگادارییە دوای ٣ خولەک دەسڕێتەوە.</i>\n\n"
         f"{down_arrows}</blockquote>"
     )
