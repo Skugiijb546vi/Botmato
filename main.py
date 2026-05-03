@@ -59,21 +59,20 @@ def handle_group_messages(message):
     try: bot.delete_message(message.chat.id, message.message_id)
     except: return 
 
-    # 🎨 دیزاینی دوگمەکان
+    # 🎨 دیزاینی دوگمەکان (بە ئیمۆجییە جوڵاوە ئاساییەکانی تێلیگرامەوە)
     markup = InlineKeyboardMarkup()
-    btn_drama = InlineKeyboardButton("🥇 دراماکان 〰✈️", url="https://t.me/matounknowndrama", style="primary")
-    btn_news = InlineKeyboardButton("⬇️ 📰 هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary")
-    btn_tv = InlineKeyboardButton("⬇️ 📺 سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary")
-    btn_cinema = InlineKeyboardButton("⬇️ 🎬 سینەما", url="https://t.me/kurd_cinema5", style="primary")
+    btn_drama = InlineKeyboardButton("🚀 دراماکان 🎬", url="https://t.me/matounknowndrama", style="primary")
+    btn_news = InlineKeyboardButton("🔥 هەواڵەکان 📰", url="https://t.me/kurdishrevolution1", style="primary")
+    btn_tv = InlineKeyboardButton("🌟 سێبەر تیڤی 📺", url="https://t.me/DOBLAZH_k", style="primary")
+    btn_cinema = InlineKeyboardButton("🍿 سینەما 🎥", url="https://t.me/kurd_cinema5", style="primary")
     
     markup.row(btn_drama, btn_news)
     markup.row(btn_tv, btn_cinema)
     markup.add(InlineKeyboardButton("✅ پشکنینی بەشداریکردن", callback_data="check_join", style="success"))
 
-    # 📝 نوسینی نامەکە
+    # 📝 نوسینی نامەکە (هەمووی بە پرێمیۆم ماوەتەوە وەک خۆت داتنابوو)
     safe_name = html.escape(message.from_user.first_name)
     
-    # ئیمۆجییە پرێمیۆمەکان بە ئایدی
     diamond_list = "<tg-emoji emoji-id='5956031393623445676'>💎</tg-emoji>"
     new_arrow = "<tg-emoji emoji-id='5796205953913196373'>💎</tg-emoji>"
     hourglass = "<tg-emoji emoji-id='5454415424319931791'>⌛️</tg-emoji>"
@@ -96,7 +95,6 @@ def handle_group_messages(message):
         sent_sticker = bot.send_sticker(message.chat.id, sticker=STICKER_ID)
         sent_msg = bot.send_message(message.chat.id, warning_text, reply_markup=markup, parse_mode="HTML", disable_web_page_preview=True)
         
-        # گۆڕینی کاتەکە بۆ ١٨٠ چرکە (سێ خولەک)
         threading.Timer(180.0, lambda: bot.delete_message(message.chat.id, sent_sticker.message_id)).start()
         threading.Timer(180.0, lambda: bot.delete_message(message.chat.id, sent_msg.message_id)).start()
         
@@ -115,7 +113,7 @@ def check_callback(call):
 # 🌐 Flask & Webhook
 app = Flask(__name__)
 @app.route('/')
-def home(): return "Bot is Online and fully customized!"
+def home(): return "Bot is Online with animated button emojis!"
 @app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
