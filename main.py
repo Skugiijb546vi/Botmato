@@ -18,7 +18,7 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com"
 bot = telebot.TeleBot(TOKEN)
 
 # 📢 لیستی چەناڵەکان
-CHANNELS = ["matounknowndrama", "kurdishrevolution1", "DOBLAZH_k", "kurd_cinema5"]
+CHANNELS = ["matounknowndrama", "kurdishrevolution1", "DOBLAZH_k", "unknown_movies9"]
 WHITELIST = {"matounknowngroup", "matodarklove"}
 
 def check_membership(user_id):
@@ -66,11 +66,11 @@ def build_vip_text(user_id, safe_name, time_str):
     text = (
         f"<blockquote><b>{bot_title}</b>\n\n"
         f"<b>╔════ 🎫 VIP PASS 🎫 ════╗</b>\n"
-        f"<b>║</b> 👤 <b>پاشا:</b> <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji>\n"
+        f"<b>║</b> 👤 <b>بەڕێز:</b> <a href='tg://user?id={user_id}'>{safe_name}</a> <tg-emoji emoji-id='5319234077457404261'>🦋</tg-emoji>\n"
         f"<b>║</b> 🔒 <b>پێگە:</b> <i>چاوەڕێی پشکنین...</i>\n"
         f"<b>║</b> ⏳ <b>کاتی ماوە:</b> <code>{time_str}</code>\n"
         f"<b>╚═════════════════════╝</b>\n\n"
-        f"<b>{new_arrow} بۆ کردنەوەی قفڵەکان، بەشداربە لێرە:</b>\n\n"
+        f"<b>{new_arrow} بۆ ئەوەی بتوانی نامە بنێری تکایە سەرەتا جۆینی ئەم چەناڵانە بکە:</b>\n\n"
         f"<tg-emoji emoji-id='6041896723402461093'>🥇</tg-emoji><tg-emoji emoji-id='6042060438965850883'>📱</tg-emoji> <b>دراماکان</b>\n"
         f"<tg-emoji emoji-id='5447410659077661506'>🌐</tg-emoji><tg-emoji emoji-id='5424818078833715060'>📣</tg-emoji> <b>هەواڵەکان</b>\n"
         f"<tg-emoji emoji-id='5872902507767796382'>📺</tg-emoji> <b>سێبەر تیڤی</b>\n"
