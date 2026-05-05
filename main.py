@@ -17,7 +17,7 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "https://your-app-name.onrender.com"
 
 bot = telebot.TeleBot(TOKEN)
 
-# 📢 لیستی چەناڵەکان (چاککراو)
+# 📢 لیستی چەناڵەکان
 CHANNELS = ["matounknowndrama", "kurdishrevolution1", "DOBLAZH_k", "unknown_movies9"]
 WHITELIST = {"matounknowngroup", "matodarklove"}
 
@@ -29,7 +29,7 @@ def check_membership(user_id):
         except: return False
     return True
 
-# 🎨 فەنکشنی دروستکردنی دوگمەکان
+# 🎨 فەنکشنی دروستکردنی دوگمەکان (بۆ ئەوەی چەند جارێک بەکاری بهێنینەوە)
 def get_markup():
     markup = InlineKeyboardMarkup()
     ID_DRAMA = "6041896723402461093"  
@@ -41,7 +41,6 @@ def get_markup():
     btn_drama = InlineKeyboardButton("دراماکان", url="https://t.me/matounknowndrama", style="primary", icon_custom_emoji_id=ID_DRAMA)
     btn_news = InlineKeyboardButton("هەواڵەکان", url="https://t.me/kurdishrevolution1", style="primary", icon_custom_emoji_id=ID_NEWS)
     btn_tv = InlineKeyboardButton("سێبەر تیڤی", url="https://t.me/DOBLAZH_k", style="primary", icon_custom_emoji_id=ID_TV)
-    # لینکی دوگمەکە چاککرا بۆ یوزەرنەیمە تازەکە
     btn_cinema = InlineKeyboardButton("سینەما", url="https://t.me/unknown_movies9", style="primary", icon_custom_emoji_id=ID_CINEMA)
     
     markup.row(btn_drama, btn_news)
